@@ -9,13 +9,27 @@ import {
 import { api } from "@/lib/axios";
 
 type HealthResponse = { status: string; service: string };
+type HealthQueryResponse = {
+  data: {
+    health: HealthResponse;
+  };
+};
 
 export function DashboardPage() {
   const health = useQuery({
     queryKey: ["health"],
     queryFn: async () => {
-      const { data } = await api.get<HealthResponse>("/health");
-      return data;
+      const { data } = await api.post<HealthQueryResponse>("/graphql", {
+        query: `
+          query Health {
+            health {
+              status
+              service
+            }
+          }
+        `,
+      });
+      return data.data.health;
     },
   });
 
@@ -30,7 +44,7 @@ export function DashboardPage() {
           </code>{" "}
           and the dev proxy for{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5 text-xs dark:bg-neutral-800">
-            /api
+            /graphql
           </code>
           .
         </p>
@@ -38,7 +52,7 @@ export function DashboardPage() {
       <Card>
         <CardHeader>
           <CardTitle>Backend health</CardTitle>
-          <CardDescription>GET /health via Axios + React Query</CardDescription>
+          <CardDescription>GraphQL health query via Axios + React Query</CardDescription>
         </CardHeader>
         <CardContent>
           {health.isLoading && (

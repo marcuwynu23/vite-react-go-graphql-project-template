@@ -7,6 +7,11 @@ import { api } from "@/lib/axios";
 import { useAuthStore } from "@/store/useStore";
 
 type LoginResponse = { token: string };
+type LoginMutationResponse = {
+  data: {
+    login: LoginResponse;
+  };
+};
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -21,11 +26,22 @@ export function LoginPage() {
 
   const login = useMutation({
     mutationFn: async () => {
-      const { data } = await api.post<LoginResponse>("/api/auth/login", {
-        email,
-        password,
+      const { data } = await api.post<LoginMutationResponse>("/graphql", {
+        query: `
+          mutation Login($input: LoginInput!) {
+            login(input: $input) {
+              token
+            }
+          }
+        `,
+        variables: {
+          input: {
+            email,
+            password,
+          },
+        },
       });
-      return data;
+      return data.data.login;
     },
     onSuccess: (data) => {
       setToken(data.token);

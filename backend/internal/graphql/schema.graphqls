@@ -1,0 +1,21 @@
+type Health {
+  status: String!
+  service: String!
+}
+
+type Query {
+  health: Health!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LoginResult {
+  token: String!
+}
+
+type Mutation {
+  login(input: LoginInput!): LoginResult!
+}

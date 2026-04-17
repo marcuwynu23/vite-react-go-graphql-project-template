@@ -12,6 +12,8 @@ type Config struct {
 	DatabaseURL    string
 	CORSOrigins    []string
 	Environment    string
+	SeedEmail      string
+	SeedPassword   string
 }
 
 func Load() (*Config, error) {
@@ -27,6 +29,8 @@ func Load() (*Config, error) {
 		DatabaseURL: strings.TrimSpace(os.Getenv("DB_URL")),
 		CORSOrigins: splitComma(origins),
 		Environment: getEnv("ENV", "development"),
+		SeedEmail:   getEnv("SEED_EMAIL", "admin@example.com"),
+		SeedPassword: getEnv("SEED_PASSWORD", "admin123"),
 	}, nil
 }
 

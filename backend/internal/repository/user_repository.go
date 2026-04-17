@@ -30,3 +30,14 @@ func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*models
 	}
 	return &u, nil
 }
+
+func (r *UserRepository) Create(ctx context.Context, email, passwordHash string) error {
+	if r.db == nil {
+		return gorm.ErrInvalidDB
+	}
+	u := &models.User{
+		Email:        email,
+		PasswordHash: passwordHash,
+	}
+	return r.db.WithContext(ctx).Create(u).Error
+}

@@ -1,8 +1,8 @@
-# PLAN.md — Vite + React + Go Web Project Template
+# PLAN.md — vite-react-go-graphql-project-template
 
 ## Overview
 
-Create a production-ready fullstack template:
+Create a production-ready fullstack GraphQL template:
 
 - Frontend: Vite + React + TypeScript
 - Backend: Go (modular architecture)
@@ -41,7 +41,7 @@ Create a production-ready fullstack template:
 ### Backend
 
 - Go (Golang)
-- net/http or Fiber (configurable)
+- Fiber + gqlgen
 - ORM (GORM or Ent)
 - Makefile
 - dotenv (.env)
@@ -196,7 +196,7 @@ go mod init project
 ### 2. Install Dependencies
 
 - ORM: GORM or Ent
-- Router: net/http or Fiber
+- API layer: Fiber + gqlgen
 - dotenv loader
 
 ### 3. Config Loader
@@ -323,9 +323,9 @@ Use **table-driven** tests in `*_test.go` files beside packages under `internal/
 | ID | Package / symbol | Behavior to assert |
 |----|------------------|---------------------|
 | BE-01 | `handler.Health` | `GET /health` returns `200` and JSON body includes `status` and `service` keys. |
-| BE-02 | `handler` (auth) | `POST /api/auth/login` with invalid JSON returns `400`. |
-| BE-03 | `handler` (auth) | `POST /api/auth/login` with valid body returns `200` and JSON `{"token": "<non-empty>"}` when DB is disabled / demo mode. |
-| BE-04 | `handler` (auth) | `POST /api/auth/login` returns `401` when credentials are invalid (when user store is enabled). |
+| BE-02 | GraphQL `login` mutation | Invalid input returns GraphQL validation/runtime error shape. |
+| BE-03 | GraphQL `login` mutation | Valid input returns `data.login.token` (non-empty) when DB is disabled / demo mode. |
+| BE-04 | GraphQL `login` mutation | Invalid credentials surface an auth error when user store is enabled. |
 | BE-05 | `service.AuthService` | Login with repository disabled issues a token without error. |
 | BE-06 | `service.AuthService` | Login with repository enabled enforces validation rules (e.g. empty password → invalid credentials). |
 | BE-07 | `repository.UserRepository` | `FindByEmail` returns `ErrRecordNotFound` when DB is nil or user missing. |
@@ -351,20 +351,20 @@ go test -race ./...    # optional CI
 ## README.md (Root)
 
 ```
-# Fullstack Vite + React + Go Template
+# vite-react-go-graphql-project-template
 
 ## Features
 - Vite + React + TypeScript
 - TailwindCSS + shadcn/ui
 - Zustand (state management)
 - React Query + Axios
-- Go backend with clean architecture
+- Go backend with clean architecture + GraphQL (`gqlgen`)
 - ORM-based database access
 - Environment-based config
 
 ## Project Structure
 - frontend/ — React app
-- backend/ — Go API
+- backend/ — Go GraphQL API
 
 ## Getting Started
 

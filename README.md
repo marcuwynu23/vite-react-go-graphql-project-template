@@ -1,17 +1,17 @@
-# Fullstack Vite + React + Go Template
+# vite-react-go-graphql-project-template
 
-Production-oriented starter with a React SPA and a Go API.
+Production-oriented starter with a React SPA and a Go GraphQL API.
 
 ## Features
 
 - **Frontend:** Vite, React 19, TypeScript, Tailwind CSS v4, shadcn/ui (new-york), Zustand, TanStack Query, Axios, React Router (lazy routes, protected routes).
-- **Backend:** Fiber, layered layout (`handler` → `service` → `repository`), GORM + PostgreSQL (optional at runtime), request logging, CORS, recovery middleware.
+- **Backend:** Fiber, `gqlgen` GraphQL, layered auth logic (`service` → `repository`), GORM + PostgreSQL (optional at runtime), request logging, CORS, recovery middleware.
 - **Config:** Root `.env.example` for documented variables; `frontend/.env.example` for `VITE_API_URL`.
 
 ## Project structure
 
 - `frontend/` — React app (`src/app`, `src/features`, `src/components/ui`, `src/lib`, `src/store`).
-- `backend/` — Go API (`cmd/server`, `internal/*`, `pkg/`, `migrations/`).
+- `backend/` — Go GraphQL API (`cmd/server`, `internal/*`, `pkg/`, `migrations/`).
 
 ## Prerequisites
 
@@ -53,7 +53,7 @@ cd frontend
 npm run dev
 ```
 
-With `VITE_API_URL` empty (default), the Vite dev server proxies `/api` and `/health` to `http://localhost:8080`, so the browser uses same-origin requests and CORS is not required for development.
+With `VITE_API_URL` empty (default), the Vite dev server proxies `/graphql`, `/playground`, and `/health` to `http://localhost:8080`, so the browser uses same-origin requests and CORS is not required for development.
 
 ## Build
 
@@ -92,11 +92,12 @@ go test ./...
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/health` | Liveness JSON |
-| POST | `/api/auth/login` | JSON body `{ "email", "password" }` → `{ "token" }` (demo token when `DB_URL` is unset) |
+| POST | `/graphql` | GraphQL endpoint (includes `login(input: LoginInput!): LoginResult!`) |
+| GET | `/playground` | GraphQL Playground UI for local testing |
 
 ## Go module path
 
-The module is `github.com/example/fullstack-template`. Replace it with your own module path and update imports under `backend/`.
+The module is currently `github.com/example/fullstack-template`. Rename it to match this repository (for example `github.com/example/vite-react-go-graphql-project-template`) and update imports under `backend/`.
 
 ## License
 

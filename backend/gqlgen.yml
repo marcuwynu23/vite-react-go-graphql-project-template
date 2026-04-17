@@ -1,0 +1,19 @@
+# Regenerate GraphQL code from schema/resolvers with:
+#   make gqlgen
+# or:
+#   go run github.com/99designs/gqlgen generate
+schema:
+  - internal/graphql/schema.graphqls
+
+exec:
+  filename: internal/graphql/generated/generated.go
+  package: generated
+
+model:
+  filename: internal/graphql/model/models_gen.go
+  package: model
+
+resolver:
+  layout: follow-schema
+  dir: internal/graphql
+  package: graphql
